@@ -4,7 +4,7 @@ class Database {
   constructor() {
     if (!Database.instance) {
       this.db = new sqlite3.Database('./db/task-manager.sqlite')
-      this.setupTables()
+      // this.setupTables()
       Database.instance = this
     }
 
@@ -85,19 +85,14 @@ class Database {
   }
 
   setupTables() {
-    try {
-      this.db.serialize(() => {
-        this.setupUsersTable()
-        this.setupWorkspacesTable()
-        this.setupBoardsTable()
-        this.setupTasksTable()
-        this.setupUserTaskAssignments()
-        this.setupTaskActions()
-      })
-      console.log('All tables have been set up successfully.')
-    } catch (err) {
-      console.error('Error setting up tables:', err.message)
-    }
+    this.db.serialize(() => {
+      this.setupUsersTable()
+      this.setupWorkspacesTable()
+      this.setupBoardsTable()
+      this.setupTasksTable()
+      this.setupUserTaskAssignments()
+      this.setupTaskActions()
+    })
   }
 
   async close() {
