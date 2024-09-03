@@ -1,13 +1,9 @@
 const sqlite3 = require('sqlite3').verbose()
-const { promisify } = require('util')
 
 class Database {
   constructor() {
     if (!Database.instance) {
       this.db = new sqlite3.Database('./db/task-manager.sqlite')
-      this.run = promisify(this.db.run.bind(this.db))
-      this.get = promisify(this.db.get.bind(this.db))
-      this.all = promisify(this.db.all.bind(this.db))
       this.setupTables()
       Database.instance = this
     }
@@ -15,9 +11,8 @@ class Database {
     return Database.instance
   }
 
-  async setupUsersTable() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS Users;
+  setupUsersTable() {
+    this.db.run(`
       CREATE TABLE Users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
@@ -25,9 +20,8 @@ class Database {
     );`)
   }
 
-  async setupWorkspacesTable() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS Workspaces;
+  setupWorkspacesTable() {
+    this.db.run(`
       CREATE TABLE Workspaces (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -37,9 +31,8 @@ class Database {
       );`)
   }
 
-  async setupBoardsTable() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS Boards;
+  setupBoardsTable() {
+    this.db.run(`
       CREATE TABLE Boards (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -50,9 +43,8 @@ class Database {
       );`)
   }
 
-  async setupTasksTable() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS Tasks;
+  setupTasksTable() {
+    this.db.run(`
       CREATE TABLE Tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -68,21 +60,19 @@ class Database {
       );`)
   }
 
-  async setupUserTaskAssgn() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS UserTaskAssignments;
+  setupUserTaskAssignments() {
+    this.db.run(`
       CREATE TABLE UserTaskAssignments (
-      taskId INTEGER NOT NULL,
-      userId INTEGER NOT NULL,
-      FOREIGN KEY (taskId) REFERENCES Tasks(id) ON DELETE CASCADE,
-      FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
-      PRIMARY KEY (taskId, userId)
-    );`)
+        taskId INTEGER NOT NULL,
+        userId INTEGER NOT NULL,
+        FOREIGN KEY (taskId) REFERENCES Tasks(id) ON DELETE CASCADE,
+        FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
+        PRIMARY KEY (taskId, userId)
+      );`)
   }
 
-  async setupUserTaskAssignments() {
-    await this.db.run(`
-      DROP TABLE IF EXISTS TaskActions;
+  setupTaskActions() {
+    this.db.run(`
       CREATE TABLE TaskActions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         taskId INTEGER NOT NULL,
@@ -94,14 +84,16 @@ class Database {
       );`)
   }
 
-  async setupTables() {
+  setupTables() {
     try {
-      await this.setupUsersTable()
-      await this.setupWorkspacesTable()
-      await this.setupBoardsTable()
-      await this.setupTasksTable()
-      await this.setupUserTaskAssignments()
-      await this.setupTaskActions()
+      this.db.serialize(() => {
+        this.setupUsersTable()
+        this.setupWorkspacesTable()
+        this.setupBoardsTable()
+        this.setupTasksTable()
+        this.setupUserTaskAssignments()
+        this.setupTaskActions()
+      })
       console.log('All tables have been set up successfully.')
     } catch (err) {
       console.error('Error setting up tables:', err.message)
@@ -118,19 +110,6 @@ class Database {
       })
     })
   }
-
-  // Example query method
-  //   query(sql, params = []) {
-  //     return new Promise((resolve, reject) => {
-  //       this.db.all(sql, params, (err, rows) => {
-  //         if (err) {
-  //           reject(err);
-  //         } else {
-  //           resolve(rows);
-  //         }
-  //       });
-  //     });
-  //   }
 }
 
 const instance = new Database()
