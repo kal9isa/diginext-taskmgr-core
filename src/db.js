@@ -4,7 +4,7 @@ class Database {
   constructor() {
     if (!Database.instance) {
       this.db = new sqlite3.Database('./db/task-manager.sqlite')
-      // this.setupTables()
+      this.setupTables()
       Database.instance = this
     }
 
