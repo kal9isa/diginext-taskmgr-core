@@ -28,6 +28,7 @@ router.get('/', (req, res) => {
 })
 
 // Read a single workspace by ID
+// TODO id, name of all boards in it
 router.get('/:id', (req, res) => {
   const { id } = req.params
   const query = 'SELECT * FROM Workspaces WHERE id = ?'

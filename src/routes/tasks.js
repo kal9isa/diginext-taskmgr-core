@@ -33,24 +33,23 @@ router.post('/', (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message })
       }
-      res
-        .status(201)
-        .json({
-          id: this.lastID,
-          title,
-          description,
-          dueDate,
-          priority,
-          status,
-          timeEstimate,
-          timeSpent,
-          board,
-        })
+      res.status(201).json({
+        id: this.lastID,
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        timeEstimate,
+        timeSpent,
+        board,
+      })
     }
   )
 })
 
 // Read all tasks
+// TODO assignee add to task data
 router.get('/', (req, res) => {
   const query = 'SELECT * FROM Tasks'
 
@@ -63,6 +62,7 @@ router.get('/', (req, res) => {
 })
 
 // Read a single task by ID
+// TODO add tags list and assignee
 router.get('/:id', (req, res) => {
   const { id } = req.params
   const query = 'SELECT * FROM Tasks WHERE id = ?'
@@ -115,19 +115,17 @@ router.put('/:id', (req, res) => {
       if (this.changes === 0) {
         return res.status(404).json({ error: 'Task not found' })
       }
-      res
-        .status(200)
-        .json({
-          id,
-          title,
-          description,
-          dueDate,
-          priority,
-          status,
-          timeEstimate,
-          timeSpent,
-          board,
-        })
+      res.status(200).json({
+        id,
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        timeEstimate,
+        timeSpent,
+        board,
+      })
     }
   )
 })

@@ -29,6 +29,7 @@ router.get('/', (req, res) => {
 })
 
 // Read a single board by ID
+// TODO id, name, dueDate, assignee, tags categorized by status in key tasks
 router.get('/:id', (req, res) => {
   const { id } = req.params
   const query = 'SELECT * FROM Boards WHERE id = ?'
