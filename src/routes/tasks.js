@@ -9,12 +9,12 @@ router.post('/', (req, res) => {
     description,
     dueDate,
     priority,
-    status,
     timeEstimate,
     timeSpent,
+    column,
     board,
   } = req.body
-  const query = `INSERT INTO Tasks (title, description, dueDate, priority, status, timeEstimate, timeSpent, board) 
+  const query = `INSERT INTO Tasks (title, description, dueDate, priority, timeEstimate, timeSpent, column, board) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
   db.db.run(
@@ -24,9 +24,9 @@ router.post('/', (req, res) => {
       description,
       dueDate,
       priority,
-      status,
       timeEstimate,
       timeSpent,
+      column,
       board,
     ],
     function (err) {
@@ -39,9 +39,9 @@ router.post('/', (req, res) => {
         description,
         dueDate,
         priority,
-        status,
         timeEstimate,
         timeSpent,
+        column,
         board,
       })
     }
@@ -49,15 +49,28 @@ router.post('/', (req, res) => {
 })
 
 // Read all tasks
-// TODO assignee add to task data
 router.get('/', (req, res) => {
-  const query = 'SELECT * FROM Tasks'
+  const query = `
+    SELECT t.id, t.title AS name, t.dueDate, t.priority, t.timeEstimate,
+           GROUP_CONCAT(u.username) AS assignees
+    FROM Tasks t
+    LEFT JOIN UserTaskAssignments uta ON t.id = uta.taskId
+    LEFT JOIN Users u ON uta.userId = u.id
+    GROUP BY t.id
+  `
 
   db.db.all(query, [], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message })
     }
-    res.status(200).json(rows)
+
+    // Process tasks to convert the assignees string into an array
+    const tasks = rows.map((task) => ({
+      ...task,
+      assignees: task.assignees ? task.assignees.split(',') : [], // Convert to array
+    }))
+
+    res.status(200).json(tasks)
   })
 })
 
@@ -86,13 +99,13 @@ router.put('/:id', (req, res) => {
     description,
     dueDate,
     priority,
-    status,
     timeEstimate,
     timeSpent,
+    column,
     board,
   } = req.body
   const query = `UPDATE Tasks 
-                 SET title = ?, description = ?, dueDate = ?, priority = ?, status = ?, timeEstimate = ?, timeSpent = ?, board = ? 
+                 SET title = ?, description = ?, dueDate = ?, priority = ?, timeEstimate = ?, timeSpent = ?, column = ?, board = ? 
                  WHERE id = ?`
 
   db.db.run(
@@ -102,9 +115,9 @@ router.put('/:id', (req, res) => {
       description,
       dueDate,
       priority,
-      status,
       timeEstimate,
       timeSpent,
+      column,
       board,
       id,
     ],
@@ -121,9 +134,9 @@ router.put('/:id', (req, res) => {
         description,
         dueDate,
         priority,
-        status,
         timeEstimate,
         timeSpent,
+        column,
         board,
       })
     }
