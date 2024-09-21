@@ -31,16 +31,32 @@ router.get('/', (req, res) => {
 // TODO id, name of all boards in it
 router.get('/:id', (req, res) => {
   const { id } = req.params
-  const query = 'SELECT * FROM Workspaces WHERE id = ?'
 
-  db.db.get(query, [id], (err, row) => {
+  // First, retrieve the workspace
+  const workspaceQuery = 'SELECT * FROM Workspaces WHERE id = ?'
+
+  db.db.get(workspaceQuery, [id], (err, workspace) => {
     if (err) {
       return res.status(500).json({ error: err.message })
     }
-    if (!row) {
+    if (!workspace) {
       return res.status(404).json({ error: 'Workspace not found' })
     }
-    res.status(200).json(row)
+
+    // Now, retrieve the boards associated with this workspace
+    const boardsQuery = 'SELECT id, title FROM Boards WHERE workspace = ?'
+
+    db.db.all(boardsQuery, [id], (err, boards) => {
+      if (err) {
+        return res.status(500).json({ error: err.message })
+      }
+
+      // Respond with both workspace and boards
+      res.status(200).json({
+        workspace,
+        boards,
+      })
+    })
   })
 })
 
