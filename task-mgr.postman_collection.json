@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"username\": \"jane_doe\" }",
+							"raw": "{ \"username\": \"alisalehi\" }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -88,7 +88,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/2",
+							"raw": "http://localhost:3000/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -96,7 +96,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -117,7 +117,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/2",
+							"raw": "http://localhost:3000/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -125,7 +125,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -137,7 +137,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/2",
+							"raw": "http://localhost:3000/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -145,7 +145,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -284,7 +284,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"title\": \"Product and Innovation\", \"baseCol\": \"status\", \"workspace\": 1 }",
+							"raw": "{ \"title\": \"Finance\", \"workspace\": 1 }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -330,7 +330,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/boards/2",
+							"raw": "http://localhost:3000/boards/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -338,7 +338,7 @@
 							"port": "3000",
 							"path": [
 								"boards",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -392,6 +392,118 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "NewColumn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Closed\",\r\n    \"position\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/boards/1/column",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"1",
+								"column"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateColumn",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Open\",\r\n    \"columnId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/boards/1/column",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"1",
+								"column"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateColumnOrder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"columns\": [\r\n    {\r\n      \"id\": 1,\r\n      \"title\": \"Open\",\r\n      \"position\": 2\r\n    },\r\n    {\r\n      \"id\": 2,\r\n      \"title\": \"In Progress\",\r\n      \"position\": 1\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/boards/1/columns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"1",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "singleColumn",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/boards/1/column/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"1",
+								"column",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -405,7 +517,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"title\": \"Fuck Hamed\", \"description\": \"Doggy\", \"dueDate\": \"2024-09-30\", \"priority\": \"High\", \"status\": \"In Progress\", \"timeEstimate\": 5, \"timeSpent\": 3, \"board\": 1 }",
+							"raw": "{\r\n    \"title\": \"Fuck Samaneh aswell\",\r\n    \"description\": \"Reverse Cow\",\r\n    \"dueDate\": \"2024-09-30\",\r\n    \"priority\": \"High\",\r\n    \"timeEstimate\": 5,\r\n    \"timeSpent\": 3,\r\n    \"column\": 3, \r\n    \"board\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -472,7 +584,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"title\": \"Move Mahmood\", \"description\": \"Task description\", \"dueDate\": \"2024-09-30\", \"priority\": \"High\", \"status\": \"To Do\", \"timeEstimate\": 5, \"timeSpent\": 0, \"board\": 1 }",
+							"raw": "{\r\n    \"title\": \"Fuck Amir too\",\r\n    \"description\": \"Gang Bang\",\r\n    \"dueDate\": \"2024-09-30\",\r\n    \"priority\": \"High\",\r\n    \"timeEstimate\": 5,\r\n    \"timeSpent\": 0,\r\n    \"column\": 1,\r\n    \"board\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -521,7 +633,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"taskId\": 1, \"userId\": 1 }",
+							"raw": "{ \"taskId\": 2, \"userId\": 1 }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -548,7 +660,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/assignments/task/1",
+							"raw": "http://localhost:3000/assignments/task/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -557,7 +669,7 @@
 							"path": [
 								"assignments",
 								"task",
-								"1"
+								"2"
 							]
 						}
 					},
