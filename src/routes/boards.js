@@ -52,17 +52,18 @@ router.get('/:id', (req, res) => {
   const boardQuery = 'SELECT * FROM Boards WHERE id = ?'
   const columnsQuery =
     'SELECT * FROM Columns WHERE boardId = ? ORDER BY position'
-    const tasksQuery = `
+  const tasksQuery = `
     SELECT t.id, t.title AS name, t.dueDate, 
       GROUP_CONCAT(u.username) AS assignees, 
-      t.column AS columnId
+      t.column AS columnId,
+      t.timeEstimate
     FROM Tasks t
     LEFT JOIN UserTaskAssignments uta ON t.id = uta.taskId
     LEFT JOIN Users u ON uta.userId = u.id
     LEFT JOIN Columns c ON t.column = c.id
     WHERE c.boardId = ?
     GROUP BY t.id
-  `;
+  `
 
   // Fetch the board data
   db.db.get(boardQuery, [id], (err, board) => {
@@ -85,9 +86,6 @@ router.get('/:id', (req, res) => {
         if (err) {
           return res.status(500).json({ error: err.message })
         }
-
-        console.log(tasks);
-        
 
         // Process tasks to convert the assignees string into an array
         tasks = tasks.map((task) => ({
